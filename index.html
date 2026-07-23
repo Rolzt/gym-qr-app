@@ -73,7 +73,7 @@
 </head>
 <div class="app">
 
-    <h1>🏋️ Squat</h1>
+  <h1>🏋️ <span id="exerciseName">Squat</span></h1>
 
     <div class="exercise-info">
     <strong>Sidste træning</strong>
@@ -110,49 +110,38 @@
 
 </div>
     <script>
+
+    
+    // Læs øvelsen fra URL'en
+const params = new URLSearchParams(
+    window.location.search
+);
+
+const exercise =
+    params.get("exercise") || "squat";
+
+// Navne som brugeren skal se
+const exerciseNames = {
+    "squat": "Squat",
+    "chest-press": "Chest Press"
+};
+
+// Vis navnet på øvelsen
+document.getElementById(
+    "exerciseName"
+).textContent =
+    exerciseNames[exercise] || "Ukendt øvelse";
+    
     // Hent tidligere gemte sæt.
     // Hvis der ikke findes nogen endnu, starter vi med en tom liste.
-    let sets = JSON.parse(localStorage.getItem("squatSets")) || [];
+const storageKey =
+    "gymTracker_" + exercise;
+
+let sets =
+    JSON.parse(
+        localStorage.getItem(storageKey)
+    ) || [];
     
-    // TEST: Tilføj en træning fra i går
-const yesterday = new Date();
-
-yesterday.setDate(
-    yesterday.getDate() - 1
-);
-
-const yesterdayDay =
-    yesterday.toISOString().split("T")[0];
-
-const testSets = [
-    {
-        weight: 90,
-        reps: 8,
-        date: yesterday.toISOString(),
-        day: yesterdayDay
-    },
-    {
-        weight: 90,
-        reps: 8,
-        date: yesterday.toISOString(),
-        day: yesterdayDay
-    },
-    {
-        weight: 90,
-        reps: 7,
-        date: yesterday.toISOString(),
-        day: yesterdayDay
-    }
-];
-
-sets = sets.concat(testSets);
-
-localStorage.setItem(
-    "squatSets",
-    JSON.stringify(sets)
-);
-
-
     function saveSet() {
         const weight = document.getElementById("weight").value;
         const reps = document.getElementById("reps").value;
@@ -171,7 +160,7 @@ const newSet = {
         sets.push(newSet);
 
         // Gem hele listen i browseren
-        localStorage.setItem("squatSets", JSON.stringify(sets));
+        localStorage.setItem(storageKey, JSON.stringify(sets));
 
         // Opdater det, vi ser på skærmen
         showSets();
