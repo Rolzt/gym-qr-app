@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+     <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        padding: 20px;
+        background: #f4f4f4;
+        font-family: Arial, sans-serif;
+    }
+
+    .app {
+        max-width: 450px;
+        margin: 40px auto;
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        margin-top: 0;
+    }
+
+    .exercise-info {
+        background: #eeeeee;
+        padding: 15px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+    }
+
+    .input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    input {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #cccccc;
+        border-radius: 8px;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background: #222222;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #444444;
+    }
+
+    #result {
+        line-height: 1.8;
+    }
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gym Tracker</title>
+</head>
+<div class="app">
+
+    <h1>🏋️ Squat</h1>
+
+    <div class="exercise-info">
+    <strong>Sidste træning</strong>
+    <p id="lastWorkout">Ingen tidligere træning endnu.</p>
+</div>
+<div class="exercise-info">
+    <strong>📈 Progression</strong>
+    <p id="progress">
+        Registrer et sæt for at se din progression.
+    </p>
+</div>
+    <h2>Dagens træning</h2>
+
+    <div class="input-group">
+        <input
+            type="number"
+            id="weight"
+            placeholder="Kg"
+        >
+
+        <input
+            type="number"
+            id="reps"
+            placeholder="Reps"
+        >
+    </div>
+    <button onclick="saveSet()">
+        Gem sæt
+    </button>
+
+    <h2>Registrerede sæt</h2>
+
+    <p id="result"></p>
+
+</div>
+    <script>
+    // Hent tidligere gemte sæt.
+    // Hvis der ikke findes nogen endnu, starter vi med en tom liste.
+    let sets = JSON.parse(localStorage.getItem("squatSets")) || [];
+    
+    // TEST: Tilføj en træning fra i går
+const yesterday = new Date();
+
+yesterday.setDate(
+    yesterday.getDate() - 1
+);
+
+const yesterdayDay =
+    yesterday.toISOString().split("T")[0];
+
+const testSets = [
+    {
+        weight: 90,
+        reps: 8,
+        date: yesterday.toISOString(),
+        day: yesterdayDay
+    },
+    {
+        weight: 90,
+        reps: 8,
+        date: yesterday.toISOString(),
+        day: yesterdayDay
+    },
+    {
+        weight: 90,
+        reps: 7,
+        date: yesterday.toISOString(),
+        day: yesterdayDay
+    }
+];
+
+sets = sets.concat(testSets);
+
+localStorage.setItem(
+    "squatSets",
+    JSON.stringify(sets)
+);
+
+
+    function saveSet() {
+        const weight = document.getElementById("weight").value;
+        const reps = document.getElementById("reps").value;
+
+        // Opret et nyt sæt
+     const now = new Date();
+
+const newSet = {
+    weight: Number(weight),
+    reps: Number(reps),
+    date: now.toISOString(),
+    day: now.toISOString().split("T")[0]
+};
+
+        // Tilføj sættet til vores liste
+        sets.push(newSet);
+
+        // Gem hele listen i browseren
+        localStorage.setItem("squatSets", JSON.stringify(sets));
+
+        // Opdater det, vi ser på skærmen
+        showSets();
+        showProgress();
+    }
+
+    function showSets() {
+    const result = document.getElementById("result");
+
+    result.innerHTML = "";
+
+    const today = new Date().toISOString().split("T")[0];
+
+    const todaysSets = sets.filter(function(set) {
+        return set.day === today;
+    });
+
+    if (todaysSets.length === 0) {
+        result.innerHTML = "Ingen sæt registreret i dag.";
+        return;
+    }
+
+    todaysSets.forEach(function(set) {
+        result.innerHTML +=
+            set.weight + " kg × " +
+            set.reps + " reps<br>";
+    });
+}
+
+    // Vis tidligere sæt, når siden åbnes
+    function showLastWorkout() {
+    const lastWorkout =
+        document.getElementById("lastWorkout");
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    const previousSets = sets.filter(function(set) {
+        return set.day && set.day !== today;
+    });
+
+    if (previousSets.length === 0) {
+        lastWorkout.textContent =
+            "Ingen tidligere træning endnu.";
+        return;
+    }
+
+    const lastDay =
+        previousSets[previousSets.length - 1].day;
+
+    const lastSets = previousSets.filter(function(set) {
+        return set.day === lastDay;
+    });
+
+    lastWorkout.innerHTML = "";
+
+    lastSets.forEach(function(set) {
+        lastWorkout.innerHTML +=
+            set.weight + " kg × " +
+            set.reps + " reps<br>";
+    });
+
+}
+function showProgress() {
+    const progress =
+        document.getElementById("progress");
+
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    // Find dagens sæt
+    const todaysSets = sets.filter(function(set) {
+        return set.day === today;
+    });
+
+    // Find alle tidligere sæt
+    const previousSets = sets.filter(function(set) {
+        return set.day && set.day !== today;
+    });
+
+    // Vi skal have både en tidligere træning
+    // og mindst ét sæt fra i dag
+    if (
+        todaysSets.length === 0 ||
+        previousSets.length === 0
+    ) {
+        progress.textContent =
+            "Registrer et sæt for at se din progression.";
+        return;
+    }
+
+    // Find datoen for sidste træning
+    const lastDay =
+        previousSets[previousSets.length - 1].day;
+
+    // Find sættene fra sidste træning
+    const lastSets = previousSets.filter(function(set) {
+        return set.day === lastDay;
+    });
+
+    // Find højeste vægt fra sidste træning
+    const lastMaxWeight = Math.max(
+        ...lastSets.map(function(set) {
+            return Number(set.weight);
+        })
+    );
+
+    // Find højeste vægt fra dagens træning
+    const todayMaxWeight = Math.max(
+        ...todaysSets.map(function(set) {
+            return Number(set.weight);
+        })
+    );
+
+    // Beregn forskellen
+    const difference =
+        todayMaxWeight - lastMaxWeight;
+
+    if (difference > 0) {
+        progress.textContent =
+            "💪 +" + difference +
+            " kg siden sidste træning!";
+    }
+
+    else if (difference === 0) {
+        progress.textContent =
+            "Samme maksimale vægt som sidste træning.";
+    }
+
+    else {
+        progress.textContent =
+            difference +
+            " kg sammenlignet med sidste træning.";
+    }
+}
+    showSets();
+showLastWorkout();
+showProgress();
+</script>
+</body>
+</html>
