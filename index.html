@@ -1,598 +1,168 @@
 <!DOCTYPE html>
 <html lang="da">
+
 <head>
-     <style>
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        margin: 0;
-        padding: 20px;
-        background: #f4f4f4;
-        font-family: Arial, sans-serif;
-    }
-
-    .app {
-        max-width: 450px;
-        margin: 40px auto;
-        background: white;
-        padding: 25px;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    h1 {
-        margin-top: 0;
-    }
-
-    .exercise-info {
-        background: #eeeeee;
-        padding: 15px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-    }
-
-    .input-group {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
-    }
-
-    input {
-        width: 100%;
-        padding: 12px;
-        font-size: 16px;
-        border: 1px solid #cccccc;
-        border-radius: 8px;
-    }
-
-    button {
-        width: 100%;
-        padding: 14px;
-        border: none;
-        border-radius: 8px;
-        background: #222222;
-        color: white;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    button:hover {
-        background: #444444;
-    }
-
-    #result {
-        line-height: 1.8;
-    }
-
-.set-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-    padding: 10px 0;
-    border-bottom: 1px solid #eeeeee;
-}
-
-.delete-button {
-    width: auto;
-    padding: 6px 12px;
-    font-size: 14px;
-}
-
-</style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym Tracker V2</title>
 
-    <title>Gym Tracker</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<div class="app">
 
-<div id="authSection">
+<body>
 
-    <h2>👤 Min konto</h2>
+<div class="container">
 
-    <div id="loggedOutView">
+    <header>
+        <h1>🏋️ Gym Tracker</h1>
+    </header>
 
-        <input type="email" id="email" placeholder="Email">
+    <!-- LOGIN -->
 
-        <br><br>
+    <section id="loginSection">
 
-        <input type="password"
-               id="password"
-               placeholder="Adgangskode">
+        <h2>Log ind</h2>
 
-        <br><br>
+        <input
+            type="email"
+            id="email"
+            placeholder="Email">
 
-        <button onclick="signUp()">Opret bruger</button>
+        <input
+            type="password"
+            id="password"
+            placeholder="Adgangskode">
 
-        <br><br>
-
-        <button onclick="signIn()">Log ind</button>
-
-        <br><br>
-
-        <button onclick="resetPassword()">
-            Glemt adgangskode?
+        <button id="loginButton">
+            Log ind
         </button>
 
-    </div>
+        <button id="signupButton">
+            Opret bruger
+        </button>
 
-    <div id="resetPasswordView" style="display:none;">
-        ...
-    </div>
+        <button id="forgotPasswordButton">
+            Glemt adgangskode
+        </button>
 
-    <div id="loggedInView">
-        ...
-    </div>
+    </section>
 
-</div>
 
-<div id="workoutSection" style="display: none;">
+    <!-- PASSWORD RESET -->
 
-  <h1>🏋️ <span id="exerciseName">Squat</span></h1>
+    <section id="passwordResetSection" class="hidden">
 
-    <div class="exercise-info">
-    <strong>Sidste træning</strong>
-    <p id="lastWorkout">Ingen tidligere træning endnu.</p>
-</div>
-<div class="exercise-info">
-    <strong>📈 Progression</strong>
-    <p id="progress">
-        Registrer et sæt for at se din progression.
-    </p>
-</div>
-    <h2>Dagens træning</h2>
-
-    <div class="input-group">
-        <input
-            type="number"
-            id="weight"
-            placeholder="Kg"
-        >
+        <h2>Ny adgangskode</h2>
 
         <input
-            type="number"
-            id="reps"
-            placeholder="Reps"
-        >
-    </div>
-    <button onclick="saveSet()">
-        Gem sæt
-    </button>
+            type="password"
+            id="newPassword"
+            placeholder="Ny adgangskode">
 
-    <h2>Registrerede sæt</h2>
+        <button id="savePasswordButton">
+            Gem ny adgangskode
+        </button>
 
-    <p id="result"></p>
+    </section>
 
-    </div>
+
+    <!-- LOGGET IND -->
+
+    <section id="accountSection" class="hidden">
+
+        <h2>Min konto</h2>
+
+        <p>
+
+            Logget ind som
+
+            <strong id="userEmail"></strong>
+
+        </p>
+
+        <button id="logoutButton">
+
+            Log ud
+
+        </button>
+
+    </section>
+
+
+    <!-- ØVELSE -->
+
+    <section id="workoutSection" class="hidden">
+
+        <h2 id="exerciseName">
+            Øvelse
+        </h2>
+
+        <div class="card">
+
+            <h3>Sidste træning</h3>
+
+            <div id="lastWorkout">
+
+                Ingen tidligere træning.
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Progression</h3>
+
+            <div id="progress">
+
+                Ingen data endnu.
+
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Nyt sæt</h3>
+
+            <input
+                type="number"
+                id="weight"
+                placeholder="Kg">
+
+            <input
+                type="number"
+                id="reps"
+                placeholder="Reps">
+
+            <button id="saveSetButton">
+
+                Gem sæt
+
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Dagens sæt</h3>
+
+            <div id="setsList">
+
+            </div>
+
+        </div>
+
+    </section>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
 
-const SUPABASE_URL = "https://fvsvwfutgeghucystumo.supabase.co";
-const SUPABASE_KEY = "sb_publishable_bJ--KwyRbwjtBSF9Ar5xsA_CHpS3MqG";
+<script src="app.js"></script>
 
-const supabaseClient = supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-);
-
-supabaseClient.auth.onAuthStateChange(function(event, session) {
-
-    alert(event);
-
-    if (event === "PASSWORD_RECOVERY") {
-        document.getElementById("loggedOutView").style.display = "none";
-        document.getElementById("loggedInView").style.display = "none";
-        document.getElementById("workoutSection").style.display = "none";
-        document.getElementById("resetPasswordView").style.display = "block";
-    }
-});
-
-async function signUp() {
-    const email =
-        document.getElementById("email").value;
-
-    const password =
-        document.getElementById("password").value;
-
-    const { data, error } =
-        await supabaseClient.auth.signUp({
-            email: email,
-            password: password
-        });
-
-    if (error) {
-        alert(
-            "Kunne ikke oprette bruger: " +
-            error.message
-        );
-        return;
-    }
-
-    alert(
-        "Bruger oprettet! Tjek din email, hvis bekræftelse er aktiveret."
-    );
-}
-
-async function signIn() {
-    const email =
-        document.getElementById("email").value;
-
-    const password =
-        document.getElementById("password").value;
-
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-    if (error) {
-        alert(
-            "Kunne ikke logge ind: " +
-            error.message
-        );
-        return;
-    }
-
-    updateAuthUI();
-}
-
-async function resetPassword() {
-    const email =
-        document.getElementById("email").value;
-
-    if (!email) {
-        alert("Indtast din email først.");
-        return;
-    }
-
-    const { error } =
-        await supabaseClient.auth.resetPasswordForEmail(
-            email,
-            {
-                redirectTo:
-                    "https://rolzt.github.io/gym-qr-app/"
-            }
-        );
-
-    if (error) {
-        alert(
-            "Kunne ikke sende mail: " +
-            error.message
-        );
-        return;
-    }
-
-    alert(
-        "Vi har sendt dig en mail med et link til at nulstille din adgangskode."
-    );
-}
-
-async function signOut() {
-    await supabaseClient.auth.signOut();
-
-    updateAuthUI();
-}
-
-async function updateAuthUI() {
-    const {
-        data: { user }
-    } = await supabaseClient.auth.getUser();
-
-    const loggedOutView =
-        document.getElementById("loggedOutView");
-
-    const loggedInView =
-        document.getElementById("loggedInView");
-
-    const workoutSection =
-        document.getElementById("workoutSection");
-
-    if (user) {
-        // Brugeren er logget ind
-        loggedOutView.style.display = "none";
-        loggedInView.style.display = "block";
-        workoutSection.style.display = "block";
-
-        document.getElementById(
-            "userEmail"
-        ).textContent = user.email;
-
-    } else {
-        // Brugeren er logget ud
-        loggedOutView.style.display = "block";
-        loggedInView.style.display = "none";
-        workoutSection.style.display = "none";
-    }
-}
-    
-    // Læs øvelsen fra URL'en
-const params = new URLSearchParams(
-    window.location.search
-);
-
-const exercise =
-    params.get("exercise") || "squat";
-
-// Navne som brugeren skal se
-const exerciseNames = {
-    "squat": "Squat",
-    "chest-press": "Chest Press"
-};
-
-// Vis navnet på øvelsen
-document.getElementById(
-    "exerciseName"
-).textContent =
-    exerciseNames[exercise] || "Ukendt øvelse";
-    
-    // Hent tidligere gemte sæt.
-    // Hvis der ikke findes nogen endnu, starter vi med en tom liste.
-const storageKey =
-    "gymTracker_" + exercise;
-
-let sets =
-    JSON.parse(
-        localStorage.getItem(storageKey)
-    ) || [];
-    
-    async function saveSet() {
-    const weight =
-        document.getElementById("weight").value;
-
-    const reps =
-        document.getElementById("reps").value;
-
-    // Tjek at felterne er udfyldt
-    if (!weight || !reps) {
-        alert("Indtast både kg og reps.");
-        return;
-    }
-
-    // Find den bruger, der er logget ind
-    const {
-        data: { user }
-    } = await supabaseClient.auth.getUser();
-
-    if (!user) {
-        alert("Du skal være logget ind.");
-        return;
-    }
-
-    // Dagens dato
-    const today =
-        new Date().toISOString().split("T")[0];
-
-    // Gem sættet i Supabase
-    const { data, error } =
-        await supabaseClient
-            .from("workout_sets")
-            .insert({
-                user_id: user.id,
-                exercise: exercise,
-                weight: Number(weight),
-                reps: Number(reps),
-                workout_day: today
-            })
-            .select();
-
-    if (error) {
-        alert(
-            "Kunne ikke gemme sættet: " +
-            error.message
-        );
-        return;
-    }
-
-    alert("Sættet er gemt i databasen! 💪");
-
-    console.log("Gemt sæt:", data);
-}
-
-function deleteSet(index) {
-
-    // Fjern sættet fra listen
-    sets.splice(index, 1);
-
-    // Gem den nye liste
-    localStorage.setItem(
-        storageKey,
-        JSON.stringify(sets)
-    );
-
-    // Opdater skærmen
-    showSets();
-    showProgress();
-}
-   function showLastWorkout() {
-    const lastWorkout =
-        document.getElementById("lastWorkout");
-
-    const today =
-        new Date().toISOString().split("T")[0];
-
-    // Find alle sæt fra tidligere dage
-    const previousSets = sets.filter(function(set) {
-        return set.day && set.day !== today;
-    });
-
-    if (previousSets.length === 0) {
-        lastWorkout.innerHTML =
-            "Ingen tidligere træning endnu.";
-        return;
-    }
-
-    // Find datoen for sidste træning
-    const lastDay =
-        previousSets[previousSets.length - 1].day;
-
-    // Find alle sæt fra den dato
-    const lastSets = previousSets.filter(function(set) {
-        return set.day === lastDay;
-    });
-
-    // Lav datoen om til dansk format
-    const formattedDate =
-        new Date(lastDay + "T12:00:00")
-            .toLocaleDateString("da-DK", {
-                day: "numeric",
-                month: "long",
-                year: "numeric"
-            });
-
-    // Vis datoen først
-    lastWorkout.innerHTML =
-        "<strong>" + formattedDate + "</strong><br><br>";
-
-    // Vis derefter sættene
-    lastSets.forEach(function(set) {
-        lastWorkout.innerHTML +=
-            set.weight + " kg × " +
-            set.reps + " reps<br>";
-    });
-}
-function showProgress() {
-    const progress =
-        document.getElementById("progress");
-
-    const today =
-        new Date().toISOString().split("T")[0];
-
-    const todaysSets = sets.filter(function(set) {
-        return set.day === today;
-    });
-
-    const previousSets = sets.filter(function(set) {
-        return set.day && set.day !== today;
-    });
-
-    if (
-        todaysSets.length === 0 ||
-        previousSets.length === 0
-    ) {
-        progress.textContent =
-            "Registrer en ny træning for at se din progression.";
-        return;
-    }
-
-    // Find datoen for sidste træning
-    const lastDay =
-        previousSets[previousSets.length - 1].day;
-
-    // Find alle sæt fra sidste træning
-    const lastSets = previousSets.filter(function(set) {
-        return set.day === lastDay;
-    });
-
-    // Højeste vægt
-    const lastMaxWeight = Math.max(
-        ...lastSets.map(function(set) {
-            return Number(set.weight);
-        })
-    );
-
-    const todayMaxWeight = Math.max(
-        ...todaysSets.map(function(set) {
-            return Number(set.weight);
-        })
-    );
-
-    // Samlet volumen fra sidste træning
-    const lastVolume = lastSets.reduce(
-        function(total, set) {
-            return total +
-                Number(set.weight) *
-                Number(set.reps);
-        },
-        0
-    );
-
-    // Samlet volumen i dag
-    const todayVolume = todaysSets.reduce(
-        function(total, set) {
-            return total +
-                Number(set.weight) *
-                Number(set.reps);
-        },
-        0
-    );
-
-    const weightDifference =
-        todayMaxWeight - lastMaxWeight;
-
-    const volumeDifference =
-        todayVolume - lastVolume;
-
-    // Vis resultaterne
-    progress.innerHTML =
-        "<strong>Maksimal vægt</strong><br>" +
-        todayMaxWeight + " kg " +
-        formatDifference(weightDifference, "kg") +
-        "<br><br>" +
-
-        "<strong>Samlet volumen</strong><br>" +
-        todayVolume + " kg " +
-        formatDifference(volumeDifference, "kg");
-}
-function formatDifference(
-    difference,
-    unit
-) {
-    if (difference > 0) {
-        return "💪 (+" +
-            difference + " " +
-            unit + ")";
-    }
-
-    if (difference < 0) {
-        return "(" +
-            difference + " " +
-            unit + ")";
-    }
-
-    return "(samme)";
-}
-
-async function updatePassword() {
-    const newPassword =
-        document.getElementById("newPassword").value;
-
-    if (!newPassword) {
-        alert("Indtast en ny adgangskode.");
-        return;
-    }
-
-    const { error } =
-        await supabaseClient.auth.updateUser({
-            password: newPassword
-        });
-
-    if (error) {
-        alert(
-            "Kunne ikke ændre adgangskoden: " +
-            error.message
-        );
-        return;
-    }
-
-    alert("Din adgangskode er blevet ændret!");
-
-    document.getElementById(
-        "resetPasswordView"
-    ).style.display = "none";
-
-    updateAuthUI();
-}
-    showSets();
-showLastWorkout();
-showProgress();
-updateAuthUI();
-
-</script>
 </body>
 </html>
