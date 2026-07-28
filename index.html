@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gym Tracker V2</title>
-
+    
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="container">
+
+
 
     <header>
         <h1>🏋️ Gym Tracker</h1>
@@ -88,6 +90,17 @@
 
     </section>
 
+        <select id="exerciseSelect">
+
+    <option value="bench-press">Bench Press</option>
+
+    <option value="squat">Squat</option>
+
+    <option value="leg-press">Leg Press</option>
+
+    <option value="lat-pulldown">Lat Pulldown</option>
+
+</select>
 
     <!-- ØVELSE -->
 
@@ -110,22 +123,29 @@
         </div>
 
 
-        <div class="card">
+    <div class="card">
 
-            <h3>Progression</h3>
+        <h3>Progression</h3>
 
-            <div id="progress">
+        <div id="progress">
 
-                Ingen data endnu.
+        Ingen data endnu.
 
-            </div>
+</div>
 
-        </div>
+</div>
 
+    <div class="card">
 
-        <div class="card">
+        <h3>📈 Udvikling</h3>
 
-            <h3>Nyt sæt</h3>
+        <canvas id="progressChart"></canvas>
+
+    </div>
+
+    <div class="card">
+
+    <h3>Nyt sæt</h3>
 
             <input
                 type="number"
@@ -162,7 +182,11 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script src="app.js"></script>
+
+
 
 </body>
 </html>
