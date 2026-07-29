@@ -826,7 +826,7 @@ exerciseSelect.value = exerciseKey;
 
 exerciseSelect.addEventListener("change", function () {
 
-    window.location.search = `?exercise=${this.value}`;
+    window.location.href = `gym.html?exercise=${this.value}`;
 
 });
 
